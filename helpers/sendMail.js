@@ -1,5 +1,4 @@
-import nodemailer from 'nodemailer'
-// const nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer');
 const { SMTP_MAIL, SMTP_PASSWORD } = process.env;
 
 const sendMail = async(email, mailSubject, content)=>{
@@ -11,10 +10,10 @@ const sendMail = async(email, mailSubject, content)=>{
             secure: false,
             requireTLS: true,
             auth: {
-                // user: SMTP_MAIL,
-                // pass: SMTP_PASSWORD
-                user: '',
-                pass: ''
+                user: SMTP_MAIL,
+                pass: SMTP_PASSWORD
+                // user: '',
+                // pass: ''
             }
         });
 
@@ -38,6 +37,4 @@ const sendMail = async(email, mailSubject, content)=>{
     }
 };
 
-// module.exports = sendMail;
-
-export default sendMail;
+module.exports = sendMail;

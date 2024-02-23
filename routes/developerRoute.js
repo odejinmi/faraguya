@@ -1,9 +1,9 @@
-import express from 'express'
-import path from 'path'
-import multer from 'multer'
-import { signUpValidation, loginValidation} from '../helpers/validation.js'
-import userController from '../controllers/userController.js'
-import auth from '../middleware/auth.js'
+const express = require('express');
+const path = require('path');
+const multer = require('multer');
+const { signUpValidation, loginValidation} = require('../helpers/developervalidation');
+const developerController = require('../controllers/developerController');
+const auth = require('../middleware/developerauth');
 const router = express.Router();
 
 
@@ -29,11 +29,9 @@ const upload = multer({
     fileFilter:filefilter
 });
 
-router.post('/register',upload.single('image'),signUpValidation, userController.register);
-router.post('/login',loginValidation, userController.login);
+router.post('/register',upload.single('image'),signUpValidation, developerController.register);
+router.post('/login',loginValidation, developerController.login);
 
-router.get('/get-user', auth, userController.getUser);
+router.get('/get-developer', auth, developerController.getdeveloper);
 
-// module.exports = routers;
-
-export default router;
+module.exports = router;

@@ -1,30 +1,34 @@
-import dotenv from "dotenv";
-// require("dotenv").config();
-import express from 'express';
-import cors from 'cors';
-import bodyParser from 'body-parser'
-import  './config/dbConnection.js';
-import userRouter from './routes/userRoute.js';
-import stackRouter from './routes/stackRoute.js';
-import companyRouter from './routes/companyRoute.js';
+require("dotenv").config();
+const express =require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 
-// const express = require('express');
-// const cors = require('cors');
+const mongoose = require('mongoose');
+mongoose.connect("mongodb://127.0.0.1:27017/fagaruya");
 // require('./config/dbConnection');
+const developerRouter = require('./routes/developerRoute');
+const adminRouter = require('./routes/adminRoute');
+const clientRouter = require('./routes/clientRoute');
+const generalRoute = require('./routes/generalRoute');
 
-dotenv.config();
+
+// dotenv.config();
 const app = express();
 
 app.use(express.json());
+app.use(express.static('public'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended:true }));
 
 app.use(cors());
 
-app.use('/api', userRouter);
-app.use('/api', companyRouter);
-app.use('/api', stackRouter);
+app.use('/api/admin', adminRouter);
+app.use('/api/client', clientRouter);
+app.use('/api/developer', developerRouter);
+app.use('/api', generalRoute);
+
+
 //error handling
 app.use((err, req, res, next) => {
 

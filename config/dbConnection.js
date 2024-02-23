@@ -1,20 +1,14 @@
 const {DB_HOST,  DB_PORT, DB_USERNAME, DB_PASSWORD, DB_NAME} = process.env;
 
 
-import mysql from 'mysql'
+ const mysql = require ('mysql');
 
 var conn = mysql.createConnection({
-    // host:DB_HOST,
-    // port:DB_PORT,
-    // database:DB_NAME,
-    // user:DB_USERNAME,
-    // password:DB_PASSWORD,
-
-    host: "localhost",
-    port: "8889",
-    database: 'fagaruya',
-    user: "root",
-    password: "root"
+    host:DB_HOST,
+    port:DB_PORT,
+    database:DB_NAME,
+    user:DB_USERNAME,
+    password:DB_PASSWORD,
 });
 
 conn.connect( function(err){
@@ -22,5 +16,5 @@ conn.connect( function(err){
     console.log(DB_NAME+' Database connected successfully!');
 });
 
-// module.exports = conn;
-export default conn;
+module.exports = conn;
+// export default conn;
