@@ -4,12 +4,14 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const mongoose = require('mongoose');
-mongoose.connect("mongodb://127.0.0.1:27017/fagaruya");
+mongoose.connect(process.env.DATABSE_URL);
 // require('./config/dbConnection');
 const developerRouter = require('./routes/developerRoute');
 const adminRouter = require('./routes/adminRoute');
 const clientRouter = require('./routes/clientRoute');
 const generalRoute = require('./routes/generalRoute');
+
+const port = process.env.PORT;
 
 
 // dotenv.config();
@@ -40,4 +42,4 @@ app.use((err, req, res, next) => {
 
 });
 
-app.listen(3000, ()=> console.log('Server is running on port 3000'));
+app.listen(port, ()=> console.log('Server is running on port '+port));

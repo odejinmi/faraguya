@@ -1,7 +1,6 @@
 const Developer = require('../models/developerModel');
 const {validationResult} = require('express-validator');
 const bcrypt = require('bcryptjs');
-const db = require('../config/dbConnection');
 const randomstring = require('randomstring');
 const  jwt = require('jsonwebtoken');
 const sendMail = require('../helpers/sendMail');

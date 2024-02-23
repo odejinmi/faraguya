@@ -1,5 +1,4 @@
 const Stack = require('../models/stackModel');
-const db = require("../config/dbConnection");
 const {validationResult} = require('express-validator');
 
 

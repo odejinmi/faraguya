@@ -1,5 +1,4 @@
 const Client = require('../models/clientModel');
-const db = require("../config/dbConnection");
 const  {validationResult} = require("express-validator");
 const bcrypt = require("bcryptjs");
 const randomstring = require("randomstring");
