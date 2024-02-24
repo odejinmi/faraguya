@@ -189,7 +189,9 @@ const {validationResult} = require('express-validator');
                 });
             }
             const stack = new Stack({
-                name
+                name,
+                // icon:'images/'+name+'.jpg'
+                icon:'images/'+req.file.filename
             });
             const stackData = await stack.save();
             return res.status(200).json({

@@ -4,6 +4,11 @@ const stackSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    icon:{
+        type: String,
+        required: true
+    },
+
 });
 
 module.exports = mongoose.model('Stack', stackSchema)

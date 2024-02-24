@@ -9,5 +9,6 @@ const router = express.Router();
 // router.get('/deletestack/:id', getstackValidation,stackController.deletestack);
 // router.post('/updatestack', updatestackValidation,stackController.updatestack);
 router.post('/subscribe', newsletterValidation, generalController.subscribe);
+router.post('/unsubscribe', newsletterValidation, generalController.unsubscribe);
 
 module.exports = router;
