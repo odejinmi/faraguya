@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const randomstring = require('randomstring');
 const  jwt = require('jsonwebtoken');
 const sendMail = require('../helpers/sendMail');
+const Chat = require("../models/chatModel");
 
 const { JWT_SECRET } = process.env;
 
@@ -17,7 +18,7 @@ const { JWT_SECRET } = process.env;
                     errors: errors.array()
                 });
             }
-            const {firstname,lastname,email,phonenumber,password} = req.body;
+            const {firstname,lastname,email,phonenumber,password,Registered_on} = req.body;
 
             const isdeveloperexist = await Developer.findOne({email});
 
@@ -41,6 +42,7 @@ const { JWT_SECRET } = process.env;
                 lastname,
                 email,
                 phonenumber,
+                Registered_on,
                 password: hashedPassword
             });
             const developerData = await developer.save();
@@ -151,11 +153,17 @@ const { JWT_SECRET } = process.env;
 
             const accessToken = await generatetoken({developer: developerData});
 
+            const updatetask = {
+                token: accessToken
+            };
+            const taskData = await Developer.findByIdAndUpdate({_id:developerData.id},{
+                $set: updatetask
+            }, {new:true});
+
             return res.status(200).json({
                 success: true,
-                token: accessToken,
                 msg: 'Login Successfully!',
-                data: developerData
+                data: taskData
             });
 
             // db.query(
@@ -226,10 +234,77 @@ const { JWT_SECRET } = process.env;
             });
         }
     };
+    const getalldeveloper = async (req, res) => {
+        try {
+            const developer = await Developer.find({});
+            return res.status(200).json({
+                success: true,
+                data: developer,
+                msg: 'Details fetch successfully',
+            });
+        } catch (error) {
+            return res.status(400).json({
+                success: false,
+                msg: error.message,
+            });
+        }
+    };
+
+    const getmessages = async (req, res) => {
+        try {
+            const {userId} = req.params
+
+            console.log(userId);
+            const myuserData = req.developer;
+            console.log(myuserData._id);
+            const messages = await Chat.find({
+                sender_id:{$in:[userId, myuserData._id]},
+                receiver_id: {$in: [userId, myuserData._id]}
+            }).sort({createdAt: -1});
+
+            return res.status(200).json({
+                success: true,
+                data: messages,
+                msg: 'Messages fetch successfully',
+            });
+        }catch (error) {
+            return res.status(400).json({
+                success: false,
+                msg: error.message,
+            });
+        }
+    };
+
+    const getgroupmessages = async (req, res) => {
+        try {
+            const {userId} = req.params
+
+            console.log(userId);
+            const myuserData = req.developer;
+            console.log(myuserData._id);
+            const messages = await Chat.find({
+                task_id: userId,
+            }).sort({createdAt: -1});
+
+            return res.status(200).json({
+                success: true,
+                data: messages,
+                msg: 'Messages fetch successfully',
+            });
+        }catch (error) {
+            return res.status(400).json({
+                success: false,
+                msg: error.message,
+            });
+        }
+    };
 
 
 module.exports ={
     register,
     login,
-    getdeveloper
+    getdeveloper,
+    getalldeveloper,
+    getmessages,
+    getgroupmessages
 };

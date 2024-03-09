@@ -31,7 +31,8 @@ const upload = multer({
 
 router.post('/register',upload.single('image'),signUpValidation, developerController.register);
 router.post('/login',loginValidation, developerController.login);
-
 router.get('/get-developer', auth, developerController.getdeveloper);
+router.get('/messages/:userId', auth, developerController.getmessages);
+router.get('/taskmessages/:groupId', auth, developerController.getgroupmessages);
 
 module.exports = router;

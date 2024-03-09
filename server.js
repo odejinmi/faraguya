@@ -10,12 +10,14 @@ const developerRouter = require('./routes/developerRoute');
 const adminRouter = require('./routes/adminRoute');
 const clientRouter = require('./routes/clientRoute');
 const generalRoute = require('./routes/generalRoute');
+const websocket = require('./config/websocket');
+const socketios = require('./config/socketio');
 
 const port = process.env.PORT;
 
-
 // dotenv.config();
 const app = express();
+socketios(app);
 
 app.use(express.json());
 app.use(express.static('public'));
@@ -42,4 +44,7 @@ app.use((err, req, res, next) => {
 
 });
 
-app.listen(port, ()=> console.log('Server is running on port '+port));
+// https.listen(port, ()=> console.log('Server is running on port '+port));
+const server = app.listen(port, ()=> console.log('Server is running on port '+port));
+
+websocket (server);

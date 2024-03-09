@@ -9,6 +9,6 @@ const stackSchema = new mongoose.Schema({
         required: true
     },
 
-});
+},{timestamps:true});
 
 module.exports = mongoose.model('Stack', stackSchema)
