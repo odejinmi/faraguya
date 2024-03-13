@@ -2,6 +2,7 @@ const Client = require('../models/clientModel');
 const  {validationResult} = require("express-validator");
 const bcrypt = require("bcryptjs");
 const randomstring = require("randomstring");
+const sendMail = require('../helpers/sendMail');
 
 
     const register = async (req, res) => {
@@ -37,6 +38,16 @@ const randomstring = require("randomstring");
             password: hashedPassword
         });
         const clientData = await client.save();
+
+        let mailSubject = 'Successful Registration';
+        let content = '<p> Hii '+ workemail+' '+', \
+             Your registration is succesfull. Our Admin will reach out to you';
+        await sendMail(req.body.email, mailSubject, content);
+
+        let mailSubject1 = 'Meeting schedule';
+        let content1 = '<p> Hii Admin a meet has been schedule by '+ workemail+' ' +' on ' + call_date +', \
+             Please reach out to the person has soon has possible';
+        await sendMail('odejinmitolulopeabraham@gmail.com', mailSubject1, content1);
 
         return res.status(200).json({
             success: true,

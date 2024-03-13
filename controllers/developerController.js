@@ -31,10 +31,12 @@ const { JWT_SECRET } = process.env;
             }
 
             const hashedPassword = await bcrypt.hash(password, 10);
-            let mailSubject = 'mail Verification';
+            let mailSubject = 'Successful Registration';
             const randomToken = randomstring.generate();
             let content = '<p> Hii '+ firstname+' '+ lastname +', \
-            Please <a href="http://127.0.0.1:3000/mail-varification?token='+randomToken+'"> Verify</a> your Mail.';
+             Your registration is succesfull.';
+            // let content = '<p> Hii '+ firstname+' '+ lastname +', \
+            // Please <a href="http://127.0.0.1:3000/mail-varification?token='+randomToken+'"> Verify</a> your Mail.';
             await sendMail(req.body.email, mailSubject, content);
 
             const developer = new Developer({
