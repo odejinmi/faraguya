@@ -12,6 +12,7 @@ const clientRouter = require('./routes/clientRoute');
 const generalRoute = require('./routes/generalRoute');
 const websocket = require('./config/websocket');
 const socketios = require('./config/socketio');
+const adminController =require( "./controllers/adminController");
 
 const port = process.env.PORT;
 
@@ -32,7 +33,7 @@ app.use('/api/client', clientRouter);
 app.use('/api/developer', developerRouter);
 app.use('/api', generalRoute);
 
-
+adminController.createadmin();
 //error handling
 app.use((err, req, res, next) => {
 
