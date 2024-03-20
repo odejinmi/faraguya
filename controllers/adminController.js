@@ -2,6 +2,9 @@ const Stack = require('../models/stackModel');
 const Admin = require('../models/adminModel');
 const {validationResult} = require('express-validator');
 const bcrypt = require('bcryptjs');
+const  jwt = require('jsonwebtoken');
+
+const { JWT_SECRET } = process.env;
 
 
     const fetchstacks = async (req, res) => {
@@ -327,25 +330,20 @@ const adminPassword = process.env.ADMIN_PASSWORD;
 const adminEmail = process.env.ADMIN_EMAIL;
 
     const createadmin = async () => {
-        const isdeveloperexist = await Admin.findOne({adminEmail});
+        const isdeveloperexist = await Admin.findOne({email: adminEmail});
         const today = new Date();
-        if (isdeveloperexist) {
-            return res.status(200).json({
-                success: false,
-                msg: 'Errors',
-                errors: 'Admin already exist!'
-            });
-        }
-        const hashedPassword = await bcrypt.hash(adminPassword, 10);
+        if (!isdeveloperexist) {
+            const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
-        const developer = new Admin({
-            "email": adminEmail,
-            Registered_on: today,
-            password: hashedPassword
-        });
-        developer.save()
-            .then(() => console.log('Admin user created successfully!'))
-            .catch(err => console.error(err));
+            const developer = new Admin({
+                email: adminEmail,
+                Registered_on: today,
+                password: hashedPassword
+            });
+            developer.save()
+                .then(() => console.log('Admin user created successfully!'))
+                .catch(err => console.error(err));
+        }
 
     };
 

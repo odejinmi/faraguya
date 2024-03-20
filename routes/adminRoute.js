@@ -33,8 +33,8 @@ const upload = multer({
     fileFilter:filefilter
 });
 
-router.post('/register',signUpValidation, developerController.register);
-router.post('/login',loginValidation, developerController.login);
+router.post('/register',signUpValidation, stackController.register);
+router.post('/login',loginValidation, stackController.login);
 router.get('/getstack', auth,stackController.fetchstacks);
 router.get('/getstack/:id', auth,getstackValidation,stackController.fetchstack);
 router.get('/deletestack/:id',auth, getstackValidation,stackController.deletestack);
