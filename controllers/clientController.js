@@ -109,15 +109,6 @@ const sendMail = require('../helpers/sendMail');
                 data: client
             })
 
-            // const sql = "SELECT * FROM company WHERE ID = ?";
-            // const id = req.params.id;
-            //
-            // db.query(sql, [id],(err, result)=> {
-            //     if (err) return res.json({Message: "Error inside server"});
-            //     return res.status(200).send({
-            //         msg:result
-            //     });
-            // })
         } catch (error) {
             return res.status(400).json({
                 success: false,

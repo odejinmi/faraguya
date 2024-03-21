@@ -5,6 +5,7 @@ const randomstring = require('randomstring');
 const  jwt = require('jsonwebtoken');
 const sendMail = require('../helpers/sendMail');
 const Chat = require("../models/chatModel");
+const Client = require("../models/clientModel");
 
 const { JWT_SECRET } = process.env;
 
@@ -252,6 +253,44 @@ const { JWT_SECRET } = process.env;
         }
     };
 
+    const fetchdeveloper = async (req, res) => {
+    try {
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(200).json({
+                success: false,
+                msg: 'Errors',
+                errors: errors.array()
+            });
+        }
+
+        const {id} = req.params;
+
+        const client = await Developer.findOne({_id: id});
+        if (!client) {
+            return res.status(200).json({
+                success: false,
+                msg: 'Errors',
+                errors: 'Developer ID not found'
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            msg: 'Developer Fetched Successfully',
+            data: client
+        })
+
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            msg: "Client ID not found",
+        });
+    }
+
+};
+
     const getmessages = async (req, res) => {
         try {
             const {userId} = req.params
@@ -308,5 +347,6 @@ module.exports ={
     getdeveloper,
     getalldeveloper,
     getmessages,
-    getgroupmessages
+    getgroupmessages,
+    fetchdeveloper
 };
