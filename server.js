@@ -12,7 +12,7 @@ const clientRouter = require('./routes/clientRoute');
 const generalRoute = require('./routes/generalRoute');
 const websocket = require('./config/websocket');
 const socketios = require('./config/socketio');
-const adminController =require( "./controllers/adminController");
+const adminController =require( "./controllers/developerController");
 
 const port = process.env.PORT;
 

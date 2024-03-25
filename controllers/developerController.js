@@ -341,6 +341,31 @@ const { JWT_SECRET } = process.env;
     };
 
 
+const adminPassword = process.env.ADMIN_PASSWORD;
+const adminEmail = process.env.ADMIN_EMAIL;
+
+const createadmin = async () => {
+    const isdeveloperexist = await Developer.findOne({email: adminEmail});
+    const today = new Date();
+    if (!isdeveloperexist) {
+        const hashedPassword = await bcrypt.hash(adminPassword, 10);
+
+        const developer = new Developer({
+            email: adminEmail,
+            Registered_on: today,
+            password: hashedPassword,
+            firstname:"tolulope",
+            lastname:"odejinmi",
+            phonenumber: "07064257276",
+            role: 1
+        });
+        developer.save()
+            .then(() => console.log('Admin user created successfully!'))
+            .catch(err => console.error(err));
+    }
+
+};
+
 module.exports ={
     register,
     login,
@@ -348,5 +373,6 @@ module.exports ={
     getalldeveloper,
     getmessages,
     getgroupmessages,
-    fetchdeveloper
+    fetchdeveloper,
+    createadmin
 };

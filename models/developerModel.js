@@ -30,6 +30,10 @@ const developerSchema = new mongoose.Schema({
         type: Number,
         default:0
     },
+    role:{
+        type: Number,
+        default:0
+    },
     ongoing_task:{
         type: Number,
         default:0
