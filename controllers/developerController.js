@@ -116,7 +116,15 @@ const { JWT_SECRET } = process.env;
     };
 
     const generatetoken= async(developer)=>{
-        const token = jwt.sign(developer, JWT_SECRET, {expiresIn: 120});
+        const expiresIn = '2h'; // Set expiration to 1 minute (adjust as needed)
+
+        const options = {
+            algorithm: 'HS256', // Use HS256 for a good balance of security and size
+            expiresIn, // Include expiration time in options
+            issuer: 'your_app_name', // Optionally set issuer for better validation
+            subject: 'developer-auth' // Optionally set subject for context
+        };
+        const token = jwt.sign(developer, JWT_SECRET, options);
         return token;
     };
 
@@ -156,18 +164,18 @@ const { JWT_SECRET } = process.env;
 
             const accessToken = await generatetoken({developer: developerData});
 
-            const updatetask = {
-                token: accessToken
-            };
-            const taskData = await Developer.findByIdAndUpdate({_id:developerData.id},{
-                $set: updatetask
-            }, {new:true});
+            // const updatetask = {
+            //     token: accessToken
+            // };
+            // const taskData = await Developer.findByIdAndUpdate({_id:developerData.id},{
+            //     $set: updatetask
+            // }, {new:true});
 
             return res.status(200).json({
                 success: true,
                 msg: 'Login Successfully!',
                 token: accessToken,
-                data: taskData
+                data: developerData
             });
 
             // db.query(
