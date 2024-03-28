@@ -116,7 +116,7 @@ const { JWT_SECRET } = process.env;
     };
 
     const generatetoken= async(developer)=>{
-        const token = jwt.sign(developer, JWT_SECRET, {expiresIn: '2h'});
+        const token = jwt.sign(developer, JWT_SECRET, {expiresIn: 120});
         return token;
     };
 
@@ -166,6 +166,7 @@ const { JWT_SECRET } = process.env;
             return res.status(200).json({
                 success: true,
                 msg: 'Login Successfully!',
+                token: accessToken,
                 data: taskData
             });
 
