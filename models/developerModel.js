@@ -18,10 +18,6 @@ const developerSchema = new mongoose.Schema({
         unique: true,
         required:true
     },
-    token:{
-        type:String,
-        required:false
-    },
     last_login:{
         type:String,
         required:false
