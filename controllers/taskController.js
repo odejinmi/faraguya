@@ -104,7 +104,7 @@ const {validationResult} = require('express-validator');
                 });
             }
             const isTitleAssigned = await Task.findOne({_id:{$ne: id}, status});
-            if (!isTitleAssigned) {
+            if (isTitleAssigned) {
                 return res.status(200).json({
                     success: false,
                     msg: 'Errors',
@@ -133,6 +133,8 @@ const {validationResult} = require('express-validator');
     };
 
     const updatetask = async (req, res) => {
+        console.log("res");
+        console.log(req.body);
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
@@ -161,7 +163,7 @@ const {validationResult} = require('express-validator');
                 });
             }
             const isTitleAssigned = await Task.findOne({_id:{$ne: id}, title});
-            if (!isTitleAssigned) {
+            if (isTitleAssigned) {
                 return res.status(200).json({
                     success: false,
                     msg: 'Errors',
@@ -169,7 +171,7 @@ const {validationResult} = require('express-validator');
                 });
             }
             const updatetask = {
-                name
+                title
             };
             const taskData = await Task.findByIdAndUpdate({_id:id},{
                 $set: updatetask
@@ -245,7 +247,7 @@ const {validationResult} = require('express-validator');
                     errors: 'Task already exist!'
                 });
             }
-            const stack = new Stack({
+            const stack = new Task({
                 title,
                 description,
                 developers,

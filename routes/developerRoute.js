@@ -5,10 +5,14 @@ const { signUpValidation, loginValidation} = require('../helpers/developervalida
 const developerController = require('../controllers/developerController');
 const auth = require('../middleware/developerauth');
 const taskController = require("../controllers/taskController");
+const subtaskController = require("../controllers/subtaskController");
 const {
     gettaskValidation,
     updatetaskValidation,
     taskValidation,
+    getsubtaskValidation,
+    updatesubtaskValidation,
+    subtaskValidation,
     getreportValidation,
     updatereportValidation,
     reportValidation, getstackValidation, updatestackValidation, stackValidation
@@ -54,8 +58,15 @@ router.post('/updatetask', auth, updatetaskValidation,taskController.updatetask)
 router.post('/updatetaskprogress', auth, gettaskValidation,taskController.updatetaskprogress);
 router.post('/createtask', auth, upload.single("task_image"), taskValidation, taskController.createtask);
 
+router.get('/getsubtasks', auth, subtaskController.fetchtasks);
+router.get('/getsubtask/:id', auth, getsubtaskValidation,subtaskController.fetchtask);
+router.get('/deletesubstack/:id', auth, getsubtaskValidation,subtaskController.deletetask);
+router.post('/updatesubtask', auth, updatesubtaskValidation,subtaskController.updatetask);
+router.post('/updatesubtaskprogress', auth, getsubtaskValidation,subtaskController.updatetaskprogress);
+router.post('/createsubtask', auth, upload.single("task_image"), subtaskValidation, subtaskController.createtask);
+
 router.get('/getreports', auth, reportController.fetchreports);
-router.get('/geteport/:id', auth, getreportValidation,reportController.fetchreport);
+router.get('/getreport/:id', auth, getreportValidation,reportController.fetchreport);
 router.get('/deletereport/:id', auth, getreportValidation,reportController.deletereport);
 router.post('/updatereport', auth, updatereportValidation,reportController.updatereport);
 router.post('/createreport', auth, upload.single("report_image"), reportValidation, reportController.createreport);

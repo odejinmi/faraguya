@@ -1,15 +1,16 @@
-const Report = require('../models/reportModel');
+const Subtask = require('../models/subtaskModel');
+const Task = require('../models/taskModel');
 const {validationResult} = require('express-validator');
 
 
-    const fetchreports = async (req, res) => {
+    const fetchtasks = async (req, res) => {
         try {
 
-            const stacks = await Report.find({});
+            const stacks = await Subtask.find({});
 
             return res.status(200).json({
                 success: true,
-                msg: 'Report Fetched Successfully',
+                msg: 'Tasks Fetched Successfully',
                 data: stacks
             })
             // const sql = "SELECT * FROM stack";
@@ -29,7 +30,7 @@ const {validationResult} = require('express-validator');
         }
     };
 
-    const fetchreport = async (req, res) => {
+    const fetchtask = async (req, res) => {
         try {
 
             const errors = validationResult(req);
@@ -43,19 +44,19 @@ const {validationResult} = require('express-validator');
 
             const {id} = req.params;
 
-            const task = await Report.findOne({ _id: id });
-            if (!task) {
+            const subtask = await Subtask.findOne({ _id: id });
+            if (!subtask) {
                 return res.status(200).json({
                     success: false,
                     msg: 'Errors',
-                    errors: 'Report ID not found'
+                    errors: 'Subtask ID not found'
                 });
             }
 
             return res.status(200).json({
                 success: true,
-                msg: 'Report Fetched Successfully',
-                data: task
+                msg: 'Subtask Fetched Successfully',
+                data: subtask
             })
 
             // const sql = "SELECT * FROM stack WHERE ID = ?";
@@ -75,7 +76,66 @@ const {validationResult} = require('express-validator');
         }
     };
 
-    const updatereport = async (req, res) => {
+    const updatetaskprogress = async (req, res) => {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(200).json({
+                    success: false,
+                    msg: 'Errors',
+                    errors: errors.array()[0]["msg"]
+                });
+            }
+            // const sql = "UPDATE stack SET `stackname`=? WHERE ID = ?";
+            // const id = req.params.id;
+            //
+            // db.query(sql, [req.body.name, id],(err, result)=> {
+            //     if (err) return res.json({Message: "Error inside server"});
+            //     return res.status(200).send({
+            //         msg:"Stack Updated succesfully"
+            //     });
+            // })
+            const {id, status} = req.body;
+            const istaskExist = await Subtask.findOne({_id:id});
+            if (!istaskExist) {
+                return res.status(200).json({
+                    success: false,
+                    msg: 'Errors',
+                    errors: 'Subtask ID not found'
+                });
+            }
+            const isTitleAssigned = await Subtask.findOne({_id:{$ne: id}, status});
+            if (isTitleAssigned) {
+                return res.status(200).json({
+                    success: false,
+                    msg: 'Errors',
+                    errors: 'Subtask is already in the progress position'
+                });
+            }
+            const updatetask = {
+                status
+            };
+            const taskData = await Subtask.findByIdAndUpdate({_id:id},{
+                $set: updatetask
+            }, {new:true});
+
+
+            return res.status(200).json({
+                success: true,
+                msg: 'Subtask updated Successfully!',
+                data: taskData
+            });
+        } catch (error) {
+            return res.status(400).json({
+                success: false,
+                msg: error.message,
+            });
+        }
+    };
+
+    const updatetask = async (req, res) => {
+        console.log("res");
+        console.log(req.body);
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
@@ -95,33 +155,33 @@ const {validationResult} = require('express-validator');
             //     });
             // })
             const {id, title} = req.body;
-            const istaskExist = await Report.findOne({_id:id});
+            const istaskExist = await Subtask.findOne({_id:id});
             if (!istaskExist) {
                 return res.status(200).json({
                     success: false,
                     msg: 'Errors',
-                    errors: 'Report ID not found'
+                    errors: 'Subtask ID not found'
                 });
             }
-            const isTitleAssigned = await Report.findOne({_id:{$ne: id}, title});
+            const isTitleAssigned = await Subtask.findOne({_id:{$ne: id}, title});
             if (isTitleAssigned) {
                 return res.status(200).json({
                     success: false,
                     msg: 'Errors',
-                    errors: 'Report name already exist'
+                    errors: 'Subtask name already exist'
                 });
             }
             const updatetask = {
                 title
             };
-            const taskData = await Report.findByIdAndUpdate({_id:id},{
+            const taskData = await Subtask.findByIdAndUpdate({_id:id},{
                 $set: updatetask
             }, {new:true});
 
 
             return res.status(200).json({
                 success: true,
-                msg: 'Report updated Successfully!',
+                msg: 'Subtask updated Successfully!',
                 data: taskData
             });
         } catch (error) {
@@ -132,7 +192,7 @@ const {validationResult} = require('express-validator');
         }
     };
 
-    const deletereport = async (req, res) => {
+    const deletetask = async (req, res) => {
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
@@ -145,21 +205,21 @@ const {validationResult} = require('express-validator');
 
             const {id} = req.params;
 
-            const isExisttask = await Report.findByIdAndDelete({_id:id});
+            const isExisttask = await Subtask.findByIdAndDelete({_id:id});
 
             return res.status(200).json({
                 success: true,
-                msg: 'Report Deleted Successfully!',
+                msg: 'Subtask Deleted Successfully!',
             });
         } catch (error) {
             return res.status(400).json({
                 success: false,
-                msg: 'Report ID not found',
+                msg: 'Subtask ID not found',
             });
         }
     };
 
-    const createreport = async (req, res) => {
+    const createtask = async (req, res) => {
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
@@ -179,30 +239,43 @@ const {validationResult} = require('express-validator');
             //         msg:"Stack created succesfully"
             //     });
             // })
-            const {title,reporter_id,report_image,description,report_id,sent_to,date,status} = req.body;
-            const isExisttask = await Report.findOne({title});
-            if (isExisttask){
+            const {title,
+                description,
+                developers, start_date,
+                due_date, available,
+                task_id
+            } = req.body;
+            const isExistsubtask = await Subtask.findOne({title});
+            if (isExistsubtask){
                 return res.status(200).json({
                     success: false,
                     msg: 'Errors',
-                    errors: 'Report already exist!'
+                    errors: 'Subtask already exist!'
                 });
             }
-            const stack = new Report({
+            const isExisttask = await Task.findOne({_id:task_id});
+            if (!isExisttask){
+                return res.status(200).json({
+                    success: false,
+                    msg: 'Errors',
+                    errors: 'Task did not exist!'
+                });
+            }
+            const stack = new Subtask({
                 title,
-                reporter_id,
                 description,
-                report_id,
-                sent_to,
-                date,
-                status,
+                developers,
+                start_date,
+                due_date,
+                available,
+                task_id,
                 // icon:'images/'+name+'.jpg'
-                report_image:'images/'+req.file.filename
+                task_image:'images/'+req.file.filename
             });
             const stackData = await stack.save();
             return res.status(200).json({
                 success: true,
-                msg: 'Report created Successfully!',
+                msg: 'Subtask created Successfully!',
                 data: stackData
             });
         }catch (error) {
@@ -214,9 +287,10 @@ const {validationResult} = require('express-validator');
     };
 
 module.exports = {
-    fetchreports,
-    fetchreport,
-    updatereport,
-    deletereport,
-    createreport
+    fetchtasks,
+    fetchtask,
+    updatetaskprogress,
+    updatetask,
+    deletetask,
+    createtask
 };
