@@ -4,8 +4,11 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const mongoose = require('mongoose');
-mongoose.connect(process.env.DATABSE_URL);
+const uri = "mongodb+srv://adeyemi:odejinmi@cluster0.hoeujpw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+mongoose.connect(uri);
+
 // require('./config/dbConnection');
+// require('./config/mongodbConnection');
 const developerRouter = require('./routes/developerRoute');
 const adminRouter = require('./routes/adminRoute');
 const clientRouter = require('./routes/clientRoute');
