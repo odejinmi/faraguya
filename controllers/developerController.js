@@ -6,6 +6,9 @@ const  jwt = require('jsonwebtoken');
 const sendMail = require('../helpers/sendMail');
 const Chat = require("../models/chatModel");
 const Client = require("../models/clientModel");
+const MongoClient = require('mongodb').MongoClient;
+const child_process = require('child_process');
+require("dotenv").config();
 
 const { JWT_SECRET } = process.env;
 
@@ -375,6 +378,28 @@ const createadmin = async () => {
 
 };
 
+const emptyDatabase = async function () {
+    let client
+    try {
+
+        const client = await MongoClient.connect(process.env.DATABSE_URL);
+        const db = client.db("fagaruya"); // Replace with your database name
+        await db.dropDatabase();
+        console.log("Database dropped successfully!");
+    } catch (error) {
+        console.error("Error dropping database:", error);
+    } finally {
+        // await client.close();
+    }
+}
+
+function restartNodeApp() {
+    process.exit(1); // Exit the current process
+
+    // Assuming your main script file is named 'app.js'
+    const scriptPath = 'node app.js';
+    child_process.spawn(scriptPath, [], { detached: true }); // Start a new process detached from the current one
+}
 module.exports ={
     register,
     login,
@@ -383,5 +408,6 @@ module.exports ={
     getmessages,
     getgroupmessages,
     fetchdeveloper,
-    createadmin
+    createadmin,
+    emptyDatabase
 };
